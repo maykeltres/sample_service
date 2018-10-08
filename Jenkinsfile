@@ -1,0 +1,1 @@
+microservicesPipeline( "ng-plataforma-teste" )
