@@ -43,10 +43,10 @@ spec:
           value: $SPRING_OPTS
         resources:
             limits:
-                memory: 768Mi
+                memory: 1Gi
                 cpu: 1
             requests:
-                memory: 768Mi
+                memory: 1Gi
                 cpu: 1
         imagePullPolicy: Always
       restartPolicy: Always
