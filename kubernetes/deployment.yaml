@@ -30,7 +30,7 @@ spec:
         readinessProbe:
             httpGet:
                 path: /actuator/health
-                port: 7777
+                port: 8080
             initialDelaySeconds: 60
             periodSeconds: 15
         ports:
