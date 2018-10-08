@@ -1,0 +1,69 @@
+spring:
+  jackson:
+    default-property-inclusion: NON_EMPTY
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+    deserialization:
+      FAIL_ON_UNKNOWN_PROPERTIES: false
+  mvc:
+    locale: en_US
+  messages:
+    basename: ValidationMessages,i18n/messages
+    cache-seconds: 60
+
+server:
+  compression:
+    enabled: true
+    mime-types: application/json
+    min-response-size: 1
+  display-name: Microservice Sample
+
+management:
+  security:
+    enabled: false
+  context-path: /actuator
+
+security:
+  basic:
+    enabled: false
+
+liquibase:
+  enabled: true
+
+logging:
+  level:
+    com.neogrid: ERROR  
+    com.neogrid.cloud.sample: ERROR
+
+---
+spring:
+  profiles: local
+  datasource:
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://localhost:1040;databaseName=car-db
+    username: liquibase
+    password: liquibase
+  jpa:
+    database-platform: org.hibernate.dialect.SQLServer2012Dialect
+    show-sql: true
+liquibase:
+  contexts: local
+  drop-first: false
+
+---
+spring:
+  profiles: h2
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:car-db;DB_CLOSE_DELAY=-1
+    username: sa
+    password: 
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+  h2:
+    console:
+      enabled: true
+liquibase:
+  contexts: local
+  drop-first: false

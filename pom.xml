@@ -1,0 +1,244 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.neogrid.cloud.sample</groupId>
+	<artifactId>microservice-sample</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>Microservice Sample</name>
+	<description>Spring Boot Microservice</description>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.10.RELEASE</version>
+	</parent>
+
+	<properties>
+		<!-- spring-boot-starter-parent (properties) -->
+		<java.version>1.8</java.version>
+
+		<!-- spring boot managed dependencies (overriding versions) -->
+		<maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
+		<jackson.version>2.9.6</jackson.version>
+		<!-- 
+			Lombok: Foi identificado um bug na versão 1.16.20 e realizado o downgrade para 1.16.18 
+			conforme orientado na issue https://github.com/rzwitserloot/lombok/issues/1612 
+		-->
+		<lombok.version>1.16.18</lombok.version>
+
+		<!-- spring-cloud-dependencies (import version) -->
+		<spring-cloud.version>Edgware.SR2</spring-cloud.version>
+
+		<!-- project managed dependencies (libs versions) -->
+		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>
+		<maven-native2ascii-plugin.version>2.0.1</maven-native2ascii-plugin.version>
+		<apt.maven.plugin>1.1.3</apt.maven.plugin>
+
+		<!-- Neogrid dependencies (libs versions) -->
+		<ngcore-api.version>1.0.0</ngcore-api.version>
+		<ngcore-rest.version>1.0.0</ngcore-rest.version>
+
+		<!-- project plugins configs -->
+		<jira.releaseIssue />
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<!-- Neogrid Exceptions, Validations and JSON support -->
+		<dependency>
+			<groupId>com.neogrid.fw</groupId>
+			<artifactId>ngcore-api-spring-boot-autoconfigure</artifactId>
+			<version>${ngcore-api.version}</version>
+		</dependency>
+
+		<!-- Neogrid support for handle RestContoller exceptions -->
+		<dependency>
+			<groupId>com.neogrid.fw</groupId>
+			<artifactId>ngcore-rest-spring-boot-autoconfigure</artifactId>
+			<version>${ngcore-rest.version}</version>
+		</dependency>
+
+		<!-- Starter for using Spring Data JPA with Hibernate -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.tomcat</groupId>
+					<artifactId>tomcat-jdbc</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- JDBC Connection Pool -->
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+		</dependency>
+
+		<!-- Microsoft JDBC Driver for SQL Server -->
+		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- Java8-specific Hibernate O/RM functionality -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-java8</artifactId>
+		</dependency>
+
+		<!-- Enables track, manage and apply changes to the database -->
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+		</dependency>
+
+		<!-- Querydsl - JPA support -->
+		<dependency>
+			<groupId>com.querydsl</groupId>
+			<artifactId>querydsl-jpa</artifactId>
+		</dependency>
+
+		<!-- Querydsl - APT support -->
+		<dependency>
+			<groupId>com.querydsl</groupId>
+			<artifactId>querydsl-apt</artifactId>
+		</dependency>
+
+		<!-- Enables in-memory database (see spring-boot-maven-plugin excludeGroupIds) -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- Enables automatic restart on classpath file changes -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- Starter for testing Spring Boot applications (JUnit, Hamcrest and Mockito) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<finalName>${project.artifactId}</finalName>
+
+		<pluginManagement>
+			<plugins>
+				<!-- Overrides the fixed version configured by "spring-boot-starter-parent" -->
+				<plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>${maven-resources-plugin.version}</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>${maven-release-plugin.version}</version>
+				<configuration>
+					<tagNameFormat>@{version}</tagNameFormat>
+					<scmCommentPrefix>${jira.releaseIssue}</scmCommentPrefix>
+					<preparationGoals>clean install</preparationGoals>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>native2ascii-maven-plugin</artifactId>
+				<version>${maven-native2ascii-plugin.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>resources</goal>
+						</goals>
+						<configuration>
+							<srcDir>${project.basedir}/src/main/resources</srcDir>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>build-info</goal>
+							<goal>repackage</goal>
+						</goals>
+						<configuration>
+							<executable>true</executable>
+							<excludeGroupIds>com.h2database</excludeGroupIds>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>com.mysema.maven</groupId>
+				<artifactId>apt-maven-plugin</artifactId>
+				<version>${apt.maven.plugin}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>process</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/generated-sources/java</outputDirectory>
+							<processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<scm>
+		<connection>scm:git:ssh://gitlab@git.neogrid.com/#GROUP#/#PROJECT#.git</connection>
+		<developerConnection>scm:git:ssh://gitlab@git.neogrid.com/#GROUP#/#PROJECT#.git</developerConnection>
+		<url>https://git.neogrid.com/#GROUP#/#PROJECT#.git</url>
+		<tag>HEAD</tag>
+	</scm>
+
+	<distributionManagement>
+		<repository>
+			<id>apps.repo</id>
+			<name>apps-maven-release</name>
+			<url>http://repo.neogrid.com/apps-maven-release</url>
+		</repository>
+		<snapshotRepository>
+			<id>apps-snapshot.repo</id>
+			<name>apps-maven-snapshot</name>
+			<url>http://repo.neogrid.com/apps-maven-snapshot</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+</project>

@@ -1,0 +1,17 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: microservice-sample-v1
+  namespace: $NAMESPACE
+  labels:
+    io.kompose.service: microservice-sample-v1
+spec:
+  ports:
+  - name: '8080'
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+  selector:
+    io.kompose.service: microservice-sample-v1
+  type: NodePort

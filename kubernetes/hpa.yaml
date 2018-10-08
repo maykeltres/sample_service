@@ -1,0 +1,13 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: microservice-sample-v1
+  namespace: $NAMESPACE
+spec:
+  maxReplicas: 2
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: microservice-sample-v1
+  targetCPUUtilizationPercentage: 90

@@ -1,0 +1,33 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: microservice-sample-v1
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: CONFIGURATION-SERVER
+      fail-fast: true
+
+---
+spring:
+  profiles: local
+  cloud:
+    config:
+      enabled: false
+      discovery:
+        enabled: false
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+---
+spring:
+  profiles: test
+  profiles.include: local
+---
+spring:
+  profiles: h2
+  profiles.include: local
