@@ -1,4 +1,4 @@
-FROM registry.alpha.cloud.neogrid.com/neogrid/openjdk:8-jre-alpine
+FROM openjdk:8-jre-alpine
 
 LABEL maintainer="Marcelo Tocchetto <marcelo.tocchetto@neogrid.com>"
 
