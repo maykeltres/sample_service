@@ -221,24 +221,4 @@
 		</plugins>
 	</build>
 
-	<scm>
-		<connection>scm:git:ssh://gitlab@git.neogrid.com/#GROUP#/#PROJECT#.git</connection>
-		<developerConnection>scm:git:ssh://gitlab@git.neogrid.com/#GROUP#/#PROJECT#.git</developerConnection>
-		<url>https://git.neogrid.com/#GROUP#/#PROJECT#.git</url>
-		<tag>HEAD</tag>
-	</scm>
-
-	<distributionManagement>
-		<repository>
-			<id>apps.repo</id>
-			<name>apps-maven-release</name>
-			<url>http://repo.neogrid.com/apps-maven-release</url>
-		</repository>
-		<snapshotRepository>
-			<id>apps-snapshot.repo</id>
-			<name>apps-maven-snapshot</name>
-			<url>http://repo.neogrid.com/apps-maven-snapshot</url>
-		</snapshotRepository>
-	</distributionManagement>
-
 </project>
